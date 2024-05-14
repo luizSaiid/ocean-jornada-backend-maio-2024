@@ -24,4 +24,17 @@ app.get('/item/:id', function(req, res){
   res.send(item)
 })
 
+app.use(express.json())
+
+app.post('/item', function(req, res){
+
+  const body = req.body
+
+  const novoItem = body.nome
+
+  itens.push(novoItem)
+
+  res.send('Item adicionado com sucesso: ' + novoItem)
+})
+
 app.listen(3000)
