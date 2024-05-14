@@ -9,4 +9,10 @@ app.get('/oi', function (req, res) {
   res.send('Olá, mundo!')
 })
 
+const list = ['rick sanchez', 'morth smith', 'summer smith']
+
+app.get('/item', function (req, res){
+  res.send('Read All funcionando!')
+})
+
 app.listen(3000)
