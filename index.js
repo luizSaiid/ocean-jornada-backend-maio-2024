@@ -9,9 +9,18 @@ app.get('/oi', function (req, res) {
   res.send('Olá, mundo!')
 })
 
-const item = ['Rick Sanchez', 'Morth Smith', 'Summer Smith']
+const itens = ['Rick Sanchez', 'Morth Smith', 'Summer Smith']
 
 app.get('/item', function (req, res){
+  res.send(itens)
+})
+
+app.get('/item/:id', function(req, res){
+
+  const id = req.params.id
+
+  const item = itens[id - 1]
+
   res.send(item)
 })
 
