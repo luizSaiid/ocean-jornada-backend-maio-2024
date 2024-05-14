@@ -12,7 +12,7 @@ app.get('/oi', function (req, res) {
 const itens = ['Rick Sanchez', 'Morth Smith', 'Summer Smith']
 
 app.get('/item', function (req, res){
-  res.send(itens)
+  res.send(itens.filter(Boolean))
 })
 
 app.get('/item/:id', function(req, res){
@@ -47,6 +47,15 @@ app.put('/item/:id', function (req, res){
 
   itens[id - 1] = atualizarItem
   res.send('Item atualizado com sucesso: ' + id + ', ' + atualizarItem)
+})
+
+app.delete('/item/:id', function(req, res) {
+
+  const id = req.params.id
+
+  delete itens[id-1]
+
+  res.send('Item removido com sucesso: ' + id)
 })
 
 app.listen(3000)
