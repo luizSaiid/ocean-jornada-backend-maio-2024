@@ -1,5 +1,5 @@
 const express = require('express')
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 
 const dbUrl = 'mongodb+srv://luizsaiid:yPNoCm2WC3FqKWSr@cluster0.nwioz1e.mongodb.net'
 const dbName = 'ocean-jornada-backend-maio-2024'
@@ -23,15 +23,22 @@ async function main() {
 
   const itens = ['Rick Sanchez', 'Morth Smith', 'Summer Smith']
 
-  app.get('/item', function (req, res) {
-    res.send(itens.filter(Boolean))
+  const db = client.db(dbName)
+  const collection = db.collection('item')
+
+
+  // ENDPOINT DO READ ALL [GET]
+  app.get('/item', async function (req, res) {
+    const documentos = await collection.find().toArray()
+    res.send(documentos)
   })
 
-  app.get('/item/:id', function (req, res) {
+  // ENDPOINT DO READ BY ID [GET]
+  app.get('/item/:id', async function (req, res) {
 
     const id = req.params.id
 
-    const item = itens[id - 1]
+   const item = await collection.findOne({ _id: new ObjectId(id) })
 
     res.send(item)
   })
