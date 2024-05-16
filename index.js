@@ -27,13 +27,13 @@ async function main() {
   const collection = db.collection('item')
 
 
-  // ENDPOINT DO READ ALL [GET]
+  // ENDPOINT DO READ ALL [GET] /item
   app.get('/item', async function (req, res) {
     const documentos = await collection.find().toArray()
     res.send(documentos)
   })
 
-  // ENDPOINT DO READ BY ID [GET]
+  // ENDPOINT DO READ BY ID [GET] /item/:id
   app.get('/item/:id', async function (req, res) {
 
     const id = req.params.id
@@ -45,17 +45,19 @@ async function main() {
 
   app.use(express.json())
 
+  // ENDPOINT [POST] /item
   app.post('/item', function (req, res) {
 
     const body = req.body
 
     const novoItem = body.nome
 
-    itens.push(novoItem)
+    collection.insertOne({ nome: novoItem })
 
     res.send('Item adicionado com sucesso: ' + novoItem)
   })
 
+  // ENDPOINT [PUT] /item/:id
   app.put('/item/:id', function (req, res) {
 
     const id = req.params.id
@@ -68,6 +70,7 @@ async function main() {
     res.send('Item atualizado com sucesso: ' + id + ', ' + atualizarItem)
   })
 
+  // ENDPOINT [DELETE] /item/:id
   app.delete('/item/:id', function (req, res) {
 
     const id = req.params.id
