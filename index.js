@@ -1,61 +1,76 @@
 const express = require('express')
-const app = express()
+const { MongoClient } = require('mongodb')
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
+const dbUrl = 'mongodb+srv://luizsaiid:yPNoCm2WC3FqKWSr@cluster0.nwioz1e.mongodb.net'
+const dbName = 'ocean-jornada-backend-maio-2024'
+const client = new MongoClient(dbUrl)
 
-app.get('/oi', function (req, res) {
-  res.send('Olá, mundo!')
-})
+async function main() {
+  console.log('Conectando banco de dados... ')
+  await client.connect()
+  console.log('Banco de dados conectado com sucesso!')
 
-const itens = ['Rick Sanchez', 'Morth Smith', 'Summer Smith']
 
-app.get('/item', function (req, res){
-  res.send(itens.filter(Boolean))
-})
+  const app = express()
 
-app.get('/item/:id', function(req, res){
+  app.get('/', function (req, res) {
+    res.send('Hello World')
+  })
 
-  const id = req.params.id
+  app.get('/oi', function (req, res) {
+    res.send('Olá, mundo!')
+  })
 
-  const item = itens[id - 1]
+  const itens = ['Rick Sanchez', 'Morth Smith', 'Summer Smith']
 
-  res.send(item)
-})
+  app.get('/item', function (req, res) {
+    res.send(itens.filter(Boolean))
+  })
 
-app.use(express.json())
+  app.get('/item/:id', function (req, res) {
 
-app.post('/item', function(req, res){
+    const id = req.params.id
 
-  const body = req.body
+    const item = itens[id - 1]
 
-  const novoItem = body.nome
+    res.send(item)
+  })
 
-  itens.push(novoItem)
+  app.use(express.json())
 
-  res.send('Item adicionado com sucesso: ' + novoItem)
-})
+  app.post('/item', function (req, res) {
 
-app.put('/item/:id', function (req, res){
+    const body = req.body
 
-  const id = req.params.id
+    const novoItem = body.nome
 
-  const body = req.body
+    itens.push(novoItem)
 
-  const atualizarItem = body.nome
+    res.send('Item adicionado com sucesso: ' + novoItem)
+  })
 
-  itens[id - 1] = atualizarItem
-  res.send('Item atualizado com sucesso: ' + id + ', ' + atualizarItem)
-})
+  app.put('/item/:id', function (req, res) {
 
-app.delete('/item/:id', function(req, res) {
+    const id = req.params.id
 
-  const id = req.params.id
+    const body = req.body
 
-  delete itens[id-1]
+    const atualizarItem = body.nome
 
-  res.send('Item removido com sucesso: ' + id)
-})
+    itens[id - 1] = atualizarItem
+    res.send('Item atualizado com sucesso: ' + id + ', ' + atualizarItem)
+  })
 
-app.listen(3000)
+  app.delete('/item/:id', function (req, res) {
+
+    const id = req.params.id
+
+    delete itens[id - 1]
+
+    res.send('Item removido com sucesso: ' + id)
+  })
+
+  app.listen(3000)
+}
+
+main()
