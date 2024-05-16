@@ -58,7 +58,7 @@ async function main() {
   })
 
   // ENDPOINT [PUT] /item/:id
-  app.put('/item/:id', function (req, res) {
+  app.put('/item/:id', async function (req, res) {
 
     const id = req.params.id
 
@@ -66,16 +66,21 @@ async function main() {
 
     const atualizarItem = body.nome
 
+    await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { nome: atualizarItem } }
+    )
+
     itens[id - 1] = atualizarItem
     res.send('Item atualizado com sucesso: ' + id + ', ' + atualizarItem)
   })
 
   // ENDPOINT [DELETE] /item/:id
-  app.delete('/item/:id', function (req, res) {
+  app.delete('/item/:id', async function (req, res) {
 
     const id = req.params.id
 
-    delete itens[id - 1]
+    await collection.deleteOne({ _id: new ObjectId(id) })
 
     res.send('Item removido com sucesso: ' + id)
   })
